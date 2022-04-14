@@ -32,13 +32,15 @@ app.get('*', (req, res) => {
 app.post('/api/notes', (req,res) => {
     console.info(`${req.method} request received to add a new note`);
 
-    if (req.body) {
+    const { title, text } = req.body;
+
+    if (title && text) {
         const newNote = {
             title,
             text,
             note_id: uuid(),
         };
-        
+        console.info(newNote);
         fs.readFile('./db/db.json', 'utf8', (err, data) => {
             if (err) {
                 console.error(err);
@@ -63,9 +65,6 @@ app.post('/api/notes', (req,res) => {
     else {
         res.status(500).json('Error in posting review');
     }
-
-
-
 })
 
 app.listen(PORT, () => {
