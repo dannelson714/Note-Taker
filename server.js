@@ -22,7 +22,15 @@ app.get('/notes', (req, res) => {
 })
 
 app.get('/api/notes', (req, res) => {
-    res.status(200).json(db);
+    // res.status(200).json(db);
+    fs.readFile('./db/db.json', 'utf8', (err, data) => {
+        if (err) {
+            console.error(err);
+        } else {
+            const parsedNotes = JSON.parse(data);
+            res.send(parsedNotes)
+        }
+    })
 })
 
 app.get('*', (req, res) => {
@@ -40,7 +48,7 @@ app.post('/api/notes', (req,res) => {
             text,
             note_id: uuid(),
         };
-        console.info(newNote);
+        
         fs.readFile('./db/db.json', 'utf8', (err, data) => {
             if (err) {
                 console.error(err);
